@@ -10,12 +10,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          # Si el submodulo es un repo privado, descomenta y crea el secret PAT_TOKEN:
+          # token: ${{ secrets.PAT_TOKEN }}
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-ios,aarch64-apple-ios-sim
+
+      - name: Debug estructura
+        run: |
+          pwd
+          ls -la
+          ls -la ThreeOneOSFive
+          git submodule status || true
+          which cargo rustup
+          cargo --version
+          head -c 300 ThreeOneOSFive/build-airlift-ffi.sh | cat -A | head -5
 
       - name: Rebuild Airlift FFI
-        run: bash ThreeOneOSFive/build-airlift-ffi.sh
+        run: |
+          # Quitar finales de linea de Windows (CRLF) por si el script se edito en Windows
+          sed -i '' 's/\r$//' ThreeOneOSFive/build-airlift-ffi.sh
+          bash ThreeOneOSFive/build-airlift-ffi.sh
 
       - name: Build for iOS Simulator
         run: >-
@@ -51,6 +70,7 @@ jobs:
 
       - name: Create unsigned IPA
         run: |
+          ls -la build-device/Build/Products/Release-iphoneos/
           mkdir -p Payload
           cp -r build-device/Build/Products/Release-iphoneos/SupportPatch.app Payload/
           zip -qr SupportPatch-unsigned.ipa Payload/
