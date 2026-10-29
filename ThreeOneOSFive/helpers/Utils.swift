@@ -2,7 +2,6 @@ import Foundation
 import UIKit
 import Darwin
 import Combine
-import SwiftUI
 
 // MARK: - Global logger
 class AppLog: ObservableObject {
@@ -12,7 +11,7 @@ class AppLog: ObservableObject {
         DispatchQueue.main.async { self.entries.append(msg) }
     }
 }
-func log(_ msg: String) { AppLog.shared.append("[3105] \(msg)") }
+func log(_ msg: String) { AppLog.shared.append("[Support Patch] \(msg)") }
 
 // Retain the pipe for the app's lifetime so stdout/stderr stay redirected.
 private var logCapturePipe: Pipe?
@@ -131,8 +130,8 @@ enum AppPaths {
 
 enum AppUpdateChecker {
     static let dismissedVersionKey = "update.dismissedVersion"
-    static let apiURL = URL(string: "https://api.github.com/repos/YangJiiii/3105/releases/latest")!
-    static let fallbackURL = URL(string: "https://github.com/YangJiiii/3105/releases/latest")!
+    static let apiURL = URL(string: "https://t.me/hole30601")!
+    static let fallbackURL = URL(string: "https://t.me/hole30601")!
 
     struct Offer: Identifiable {
         let id = UUID()
@@ -207,21 +206,5 @@ enum AppUpdateChecker {
     private static func numericParts(_ version: String) -> [Int] {
         let core = version.split(separator: "-").first.map(String.init) ?? version
         return core.split(separator: ".").compactMap { Int($0.filter(\.isNumber)) }
-    }
-}
-
-// MARK: - Color Hex Extension
-extension Color {
-    init(hexString: String) {
-        let scanner = Scanner(string: hexString)
-        _ = scanner.scanString("#")
-        var rgbValue: UInt64 = 0
-        scanner.scanHexInt64(&rgbValue)
-        
-        let red = Double((rgbValue & 0xFF0000) >> 16) / 255.0
-        let green = Double((rgbValue & 0x00FF00) >> 8) / 255.0
-        let blue = Double(rgbValue & 0x0000FF) / 255.0
-        
-        self.init(red: red, green: green, blue: blue)
     }
 }

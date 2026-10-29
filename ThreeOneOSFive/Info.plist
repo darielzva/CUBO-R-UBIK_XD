@@ -5,7 +5,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleDisplayName</key>
-    <string>3105</string>
+    <string>SupportPatch</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>3105</string>
+    <string>SupportPatch</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
@@ -24,7 +24,7 @@
     <array>
         <dict>
             <key>CFBundleTypeName</key>
-            <string>3105 Patch Package</string>
+            <string>Support Patch Package</string>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
             <key>LSHandlerRank</key>
@@ -46,6 +46,13 @@
             </array>
         </dict>
     </array>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>freefiremax</string>
+        <string>freefire</string>
+        <string>com.googleusercontent.apps.753696289953-c71g0mbsqjtrtdgf1ov874fpru7f22g6</string>
+        <string>localdevvpn</string>
+    </array>
     <key>UTExportedTypeDeclarations</key>
     <array>
         <dict>
@@ -54,7 +61,7 @@
                 <string>public.data</string>
             </array>
             <key>UTTypeDescription</key>
-            <string>3105 Patch Package</string>
+            <string>Support Patch Package</string>
             <key>UTTypeIdentifier</key>
             <string>com.yangjiii.3105.patch-package</string>
             <key>UTTypeTagSpecification</key>
@@ -80,6 +87,17 @@
     <string>3105 needs access to photos for wallpaper customization.</string>
     <key>NSDocumentsFolderUsageDescription</key>
     <string>3105 needs access to documents.</string>
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>Support Patch uses the local network to pair this iPhone in Developer Mode.</string>
+    <key>NSBonjourServices</key>
+    <array>
+        <string>_remotepairing-pairable-host._tcp</string>
+        <string>_aircardprobe._tcp</string>
+    </array>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>audio</string>
+    </array>
     <key>UIApplicationSceneManifest</key>
     <dict>
         <key>UIApplicationSupportsMultipleScenes</key>

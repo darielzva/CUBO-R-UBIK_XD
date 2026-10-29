@@ -1266,6 +1266,20 @@ struct FileBrowserView: View {
                 message: replacementErrorMessage(error)
             )
         case .success(let urls):
+            let requiresPairingTunnel = DevicePatchService.requiresPairingTunnel
+            guard !requiresPairingTunnel || LocalDevTunnelProbe.isConnected else {
+                replacementNotice = FileReplacementNotice(
+                    title: language.text("browser.replace_error_title"),
+                    message: language.text("browser.replace_error_tunnel")
+                )
+                log("filebrowser: replacement blocked because LocalDevVPN is not connected")
+                return
+            }
+            if requiresPairingTunnel {
+                log("filebrowser: pairing replacement authorized by LocalDevVPN route")
+            } else {
+                log("filebrowser: legacy supported iOS replacement uses exploit access without pairing")
+            }
             let selection: FileReplacementSelection
             do {
                 selection = try request.selection(from: urls)
@@ -1278,6 +1292,8 @@ struct FileBrowserView: View {
                 return
             }
             activityText = language.text("browser.replacing")
+            let replacementBundleID = bundleID
+            let replacementContainerRoot = URL(fileURLWithPath: containerPath, isDirectory: true)
             log(
                 "filebrowser: replacement started target=\(selection.targetName) " +
                     "source=\(selection.sourceURL.lastPathComponent)"
@@ -1292,10 +1308,30 @@ struct FileBrowserView: View {
                 }
                 do {
                     log("filebrowser: replacement copy begin target=\(selection.targetName)")
-                    let replacement = try FileReplacementService.replace(
-                        target: selection.targetURL,
-                        with: selection.sourceURL
-                    )
+                    let replacement: FileReplacementResult
+                    if requiresPairingTunnel {
+                        if let replacementBundleID {
+                            replacement = try FileReplacementService.replaceOverPairing(
+                                target: selection.targetURL,
+                                with: selection.sourceURL,
+                                bundleID: replacementBundleID,
+                                containerRoot: replacementContainerRoot,
+                                pairingFileURL: PairingController.pairingFileURL
+                            )
+                        } else {
+                            replacement = try FileReplacementService.replaceOverPairing(
+                                target: selection.targetURL,
+                                with: selection.sourceURL,
+                                remoteTargetPath: selection.targetURL.path,
+                                pairingFileURL: PairingController.pairingFileURL
+                            )
+                        }
+                    } else {
+                        replacement = try FileReplacementService.replace(
+                            target: selection.targetURL,
+                            with: selection.sourceURL
+                        )
+                    }
                     let size = ByteCountFormatter.string(
                         fromByteCount: replacement.byteCount,
                         countStyle: .file
@@ -1346,7 +1382,13 @@ struct FileBrowserView: View {
         case .sameFile: key = "browser.replace_error_same_file"
         case .symbolicLinkUnsupported: key = "browser.replace_error_symlink"
         case .sourceTooLarge: key = "browser.replace_error_too_large"
+        case .backupFailed: key = "browser.replace_error_backup"
         case .replacementFailed: key = "browser.replace_error_failed"
+        case .pairingFileMissing: key = "browser.replace_error_pairing_missing"
+        case .bundleIdentifierMissing: key = "browser.replace_error_remote_container"
+        case .remotePathUnsafe: key = "browser.replace_error_remote_path"
+        case .remoteContainerUnavailable: key = "browser.replace_error_remote_container"
+        case .remoteReplacementFailed(let detail): return detail
         }
         return language.text(key)
     }

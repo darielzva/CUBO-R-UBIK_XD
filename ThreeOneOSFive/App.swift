@@ -1,6 +1,18 @@
 import SwiftUI
 import UIKit
 
+@_silgen_name("ALGetGrappaToken")
+private func retainGrappaTokenSymbol(
+    _ version: UInt32,
+    _ deviceType: UInt32,
+    _ protocolVersion: UInt32,
+    _ output: UnsafeMutablePointer<UInt8>?,
+    _ maximumLength: Int,
+    _ outputLength: UnsafeMutablePointer<Int>?,
+    _ errorBuffer: UnsafeMutablePointer<CChar>?,
+    _ errorLength: Int
+) -> Int32
+
 @main
 struct ThreeOneOSFiveApp: App {
     @StateObject private var appState = AppState()
@@ -13,65 +25,13 @@ struct ThreeOneOSFiveApp: App {
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
+        _ = retainGrappaTokenSymbol(0, 0, 0, nil, 0, nil, nil, 0)
         setupLogCapture()
-        log("app: 3105 launching — iOS \(AppInfo.osVersion) (\(AppInfo.osBuild)) \(AppInfo.machineName)")
-        copiarYDesempaquetarParchesAutomaticos()
-    }
-
-    private func copiarYDesempaquetarParchesAutomaticos() {
-        let fileManager = FileManager.default
-        guard let documents = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            log("app: no se pudo acceder al directorio de documentos")
-            return
-        }
-        
-        let bundleURL = Bundle.main.bundleURL
-        let patchesDirectory = documents.appendingPathComponent("Patches", isDirectory: true)
-        
-        // Asegurar que la carpeta Patches exista exactamente como la app lo espera
-        do {
-            if !fileManager.fileExists(atPath: patchesDirectory.path) {
-                try fileManager.createDirectory(at: patchesDirectory, withIntermediateDirectories: true, attributes: nil)
-            }
-        } catch {
-            log("app: error al crear directorio Patches: \(error)")
-            return
-        }
-        
-        // Búsqueda profunda dentro del bundle para encontrar los archivos .3105 incluidos por GitHub Actions
-        if let enumerator = fileManager.enumerator(at: bundleURL, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles]) {
-            for case let url as URL in enumerator {
-                if url.pathExtension == "3105" {
-                    let fileName = url.lastPathComponent
-                    let destinationFileURL = documents.appendingPathComponent(fileName)
-                    
-                    let patchNameWithoutExt = url.deletingPathExtension().lastPathComponent
-                    let targetPatchFolder = patchesDirectory.appendingPathComponent(patchNameWithoutExt, isDirectory: true)
-                    
-                    do {
-                        // 1. Copiar el archivo .3105 a la raíz de documentos si no existe
-                        if !fileManager.fileExists(atPath: destinationFileURL.path) {
-                            try fileManager.copyItem(at: url, to: destinationFileURL)
-                            log("app: archivo .3105 copiado a raíz -> \(fileName)")
-                        }
-                        
-                        // 2. Replicar el comportamiento nativo: extraer/crear la carpeta interna de trabajo dentro de Patches
-                        if !fileManager.fileExists(atPath: targetPatchFolder.path) {
-                            try fileManager.createDirectory(at: targetPatchFolder, withIntermediateDirectories: true, attributes: nil)
-                            
-                            // Copiamos el contenido interno del archivo .3105 (o el archivo mismo adaptado) dentro de su carpeta de proyecto en Patches
-                            let internalDestination = targetPatchFolder.appendingPathComponent(fileName)
-                            if !fileManager.fileExists(atPath: internalDestination.path) {
-                                try fileManager.copyItem(at: url, to: internalDestination)
-                                log("app: estructura de parche desplegada en Patches -> \(patchNameWithoutExt)")
-                            }
-                        }
-                    } catch {
-                        log("app: error al desplegar parche automático \(fileName): \(error)")
-                    }
-                }
-            }
-        }
+        PairingController.removeLegacyTransportLogs()
+        SecuritySuiteProbe.denyDebugger()
+        ["activation_granted", "activation_account", "activation_password", "activation_uuid", "activation_expires_at"]
+            .forEach(UserDefaults.standard.removeObject(forKey:))
+        log("app: Support Patch launching — iOS \(AppInfo.osVersion) (\(AppInfo.osBuild)) \(AppInfo.machineName)")
     }
 
     private var language: AppLanguage {
@@ -87,29 +47,35 @@ struct ThreeOneOSFiveApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ZStack {
-                ContentView()
-                    .environmentObject(appState)
-                    .environmentObject(patchDraftCoordinator)
-                    .environmentObject(fileOperationCoordinator)
-                    .environment(\.appLanguage, language)
-                    .environment(\.locale, language.locale)
-                    .opacity(showOnboarding ? 0 : 1)
-                    .allowsHitTesting(!showOnboarding)
+            Group {
+                if appState.securityBlocked {
+                    SecurityBlockView(reason: appState.securityMessage)
+                } else {
+                    ZStack {
+                        ContentView()
+                            .environmentObject(appState)
+                            .environmentObject(patchDraftCoordinator)
+                            .environmentObject(fileOperationCoordinator)
+                            .environment(\.appLanguage, language)
+                            .environment(\.locale, language.locale)
+                            .opacity(showOnboarding ? 0 : 1)
+                            .allowsHitTesting(!showOnboarding)
 
-                if showOnboarding {
-                    OnboardingView {
-                        OnboardingStore.markCompleted()
-                        withAnimation(.spring(response: 0.42, dampingFraction: 0.86)) {
-                            showOnboarding = false
+                        if showOnboarding {
+                            OnboardingView {
+                                OnboardingStore.markCompleted()
+                                withAnimation(.spring(response: 0.42, dampingFraction: 0.86)) {
+                                    showOnboarding = false
+                                }
+                                appState.detectSupport()
+                                checkForUpdate()
+                            }
+                            .environment(\.appLanguage, language)
+                            .environment(\.locale, language.locale)
+                            .transition(.opacity.combined(with: .scale(scale: 0.98)))
+                            .zIndex(1)
                         }
-                        appState.detectSupport()
-                        checkForUpdate()
                     }
-                    .environment(\.appLanguage, language)
-                    .environment(\.locale, language.locale)
-                    .transition(.opacity.combined(with: .scale(scale: 0.98)))
-                    .zIndex(1)
                 }
             }
             .displayIdentityAttribution(isPresented: $showAttribution, enabled: !showOnboarding)
@@ -128,19 +94,52 @@ struct ThreeOneOSFiveApp: App {
                     }
                 )
             }
+            .onOpenURL { url in
+                patchDraftCoordinator.presentImport(url)
+            }
             .onAppear {
+                appState.evaluateRuntimeSecurity()
                 if !showOnboarding {
                     appState.detectSupport()
                     checkForUpdate()
                 }
             }
             .onChange(of: scenePhase) { phase in
-                guard phase == .active, !showOnboarding else { return }
+                guard phase == .active else { return }
+                appState.evaluateRuntimeSecurity()
+                guard !showOnboarding else { return }
                 appState.detectSupport()
             }
-            .onOpenURL { url in
-                patchDraftCoordinator.presentImport(url)
+            .task {
+                while !Task.isCancelled {
+                    try? await Task.sleep(nanoseconds: 30_000_000_000)
+                    guard scenePhase == .active else { continue }
+                    appState.evaluateRuntimeSecurity()
+                }
             }
+        }
+    }
+}
+
+struct SecurityBlockView: View {
+    let reason: String
+
+    var body: some View {
+        ZStack {
+            Color.black.ignoresSafeArea()
+            VStack(spacing: 16) {
+                Image(systemName: "shield.lefthalf.filled")
+                    .font(.system(size: 48, weight: .bold))
+                    .foregroundStyle(.red)
+                Text("Ứng dụng đã bị khóa")
+                    .font(.title2.weight(.bold))
+                    .foregroundStyle(.white)
+                Text(reason)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.white.opacity(0.8))
+                    .frame(maxWidth: 420)
+            }
+            .padding(24)
         }
     }
 }
@@ -149,7 +148,8 @@ class AppState: ObservableObject {
     @Published var exploitStatus: ExploitStatus = .notStarted
     @Published var unsupportedMessage: String?
     @Published var kernelExploitRunning = false
-
+    @Published var securityBlocked = false
+    @Published var securityMessage = ""
     private var autoRunAttempted = false
 
     var kernelExploitApplicable: Bool {
@@ -163,7 +163,23 @@ class AppState: ObservableObject {
 
     var isSupported: Bool { unsupportedMessage == nil }
 
+    func evaluateRuntimeSecurity() {
+        switch RuntimeProbe.currentState() {
+        case .ok, .unavailable:
+            securityBlocked = false
+            securityMessage = ""
+        case .blockedByDebug:
+            securityBlocked = true
+            securityMessage = "Debugger đang được phát hiện."
+        case .blockedBySimulator:
+            securityBlocked = true
+            securityMessage = "Môi trường giả lập không được phép chạy phiên bản này."
+        }
+    }
+
     func detectSupport() {
+        evaluateRuntimeSecurity()
+        if securityBlocked { return }
         let v = AppInfo.versionTuple
         let supported = ExploitSupportPolicy.isSupported(
             major: v.major,

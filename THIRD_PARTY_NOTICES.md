@@ -1,6 +1,6 @@
 # Third-party notices and credits
 
-3105 is developed and designed by [YangJiii](https://x.com/duongduong0908). It also incorporates ideas, formats, research, or implementation foundations from the following community work.
+3105 is developed and designed by [Hole30601](https://t.me/hole30601). It also incorporates ideas, formats, research, or implementation foundations from the following community work.
 
 | Project/person | Contribution acknowledged by 3105 | Upstream |
 | --- | --- | --- |
@@ -11,5 +11,7 @@
 | opa334 and Dopamine contributors | Kernel-exploit research foundation | [Dopamine](https://github.com/opa334/Dopamine) |
 
 Original portions of 3105 are distributed under GPL-3.0. Pocket-Poster also publishes a GPL-3.0 license in its upstream repository. FilzaSlop did not expose a repository license through GitHub when this notice was prepared. Review each upstream project and its current terms before redistributing derived code.
+
+The Airlift Rust source in `ThreeOneOSFive/airlift-rust-core` is derived from [AirCard-iOS](https://github.com/Mak5er/AirCard-iOS) and is distributed under the MIT License; its copyright and license are retained in that directory.
 
 The 3105 license applies only to material for which the project owner has the right to grant that license. This file provides attribution; it does not replace upstream copyright or license notices and does not relicense third-party material.

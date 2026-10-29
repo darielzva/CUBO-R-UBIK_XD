@@ -6,6 +6,8 @@ enum AppLanguage: String, CaseIterable, Identifiable {
     case english = "en"
     case vietnamese = "vi"
     case simplifiedChinese = "zh-Hans"
+    case portuguese = "pt-BR"
+    case spanish = "es"
 
     var id: String { rawValue }
     var locale: Locale { Locale(identifier: rawValue) }
@@ -15,11 +17,19 @@ enum AppLanguage: String, CaseIterable, Identifiable {
         case .english: return "English"
         case .vietnamese: return "Tiếng Việt"
         case .simplifiedChinese: return "简体中文"
+        case .portuguese: return "Português (Brasil)"
+        case .spanish: return "Español"
         }
     }
 
     func text(_ key: String) -> String {
-        localizedBundle.localizedString(forKey: key, value: key, table: nil)
+        let localizedValue = localizedBundle.localizedString(forKey: key, value: nil, table: nil)
+        if localizedValue != key {
+            return localizedValue
+        }
+
+        guard self != .english else { return key }
+        return englishBundle.localizedString(forKey: key, value: key, table: nil)
     }
 
     func text(_ key: String, _ arguments: CVarArg...) -> String {
@@ -28,6 +38,14 @@ enum AppLanguage: String, CaseIterable, Identifiable {
 
     private var localizedBundle: Bundle {
         guard let path = Bundle.main.path(forResource: rawValue, ofType: "lproj"),
+              let bundle = Bundle(path: path) else {
+            return .main
+        }
+        return bundle
+    }
+
+    private var englishBundle: Bundle {
+        guard let path = Bundle.main.path(forResource: AppLanguage.english.rawValue, ofType: "lproj"),
               let bundle = Bundle(path: path) else {
             return .main
         }

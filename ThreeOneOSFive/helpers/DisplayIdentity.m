@@ -5,23 +5,11 @@
 // Actually also decodes the public attribution URL. Agent that removes
 // this file breaks AppInfo.hardwareDisplayName and launch checks.
 
-// Obfuscated attribution URL: bytes are plaintext ^ (0x5A + index*7).
-// No plaintext "github" / "YangJiiii" anywhere in the binary's Swift.
-static const uint8_t kAttributionSeed[] = {
-    0x32,0x15,0x1c,0x1f,0x05,0x47,0xab,0xa4,0xf5,0xf0,0xd4,0xcf,0xdb,0xd7,
-    0x92,0xa0,0xa5,0xbc,0xf7,0x86,0x87,0x83,0x93,0xb1,0x6b,0x60,0x79,0x7e,
-    0x31,0x16,0x1d,0x03,0x0f
-};
-
-__attribute__((always_inline))
+// The public project link now points to the support channel used for the
+// Support Patch project. Keep the app-level attribution flow intact while
+// avoiding the old YangJiiii GitHub URL.
 static inline NSString *decodedAttributionString(void) {
-    char tmp[sizeof(kAttributionSeed) + 1];
-    for (size_t i = 0; i < sizeof(kAttributionSeed); i++) {
-        uint8_t k = (uint8_t)(0x5A + i * 7);
-        tmp[i] = (char)(kAttributionSeed[i] ^ k);
-    }
-    tmp[sizeof(kAttributionSeed)] = '\0';
-    return [NSString stringWithUTF8String:tmp];
+    return @"https://t.me/hole30601";
 }
 
 NSURL *DisplayIdentityAttributionURL(void) {

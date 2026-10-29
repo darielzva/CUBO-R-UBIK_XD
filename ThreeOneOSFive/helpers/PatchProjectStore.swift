@@ -20,6 +20,59 @@ struct PatchStoreAlert: Identifiable {
     }
 }
 
+enum PatchToggleGroup {
+    case aim
+    case location
+    case skin
+    case capCut
+}
+
+struct BundledPatch {
+    let resourceName: String
+    let projectName: String
+    let password: String?
+}
+
+enum FreeFireGame: Hashable {
+    case max
+    case regular
+    case capCut
+
+    var bundledPatches: [BundledPatch] {
+        switch self {
+        case .max:
+            return [
+                BundledPatch(resourceName: "AimNeck", projectName: "Aim Neck", password: "nmkiosvn"),
+                BundledPatch(resourceName: "AimChest", projectName: "Aim Chest", password: "nmkiosvn"),
+                BundledPatch(resourceName: "AimBody", projectName: "Aim Body", password: "nmkiosvn"),
+                BundledPatch(resourceName: "AimDrag", projectName: "Aim Drag", password: "nmkiosvn"),
+                BundledPatch(resourceName: "AimMagic", projectName: "Aim Magic", password: "nmkiosvn"),
+                BundledPatch(resourceName: "AimDau", projectName: "Aim Đầu", password: "nmkiosvn"),
+                BundledPatch(resourceName: "SungTrang", projectName: "Súng Trắng", password: "YaBao"),
+                BundledPatch(resourceName: "ChamDo", projectName: "Chạm Đỏ", password: "YaBao")
+            ]
+        case .regular:
+            return [
+                BundledPatch(resourceName: "AimNeckFreeFire", projectName: "Aim Neck Free Fire", password: "james"),
+                BundledPatch(resourceName: "AimBodyFreeFire", projectName: "Aim Body Free Fire", password: "james"),
+                BundledPatch(resourceName: "AimDragFreeFire", projectName: "Aim Drag Free Fire", password: "james"),
+                BundledPatch(resourceName: "AimHeadFreeFire", projectName: "Aim Head Free Fire", password: "YB"),
+                BundledPatch(resourceName: "AimMagicFreeFire", projectName: "Aim Magic Free Fire", password: nil),
+                BundledPatch(resourceName: "UnlockFPS144", projectName: "Unlock FPS 144", password: "alpha_fps"),
+                BundledPatch(resourceName: "ChamsHoloTim", projectName: "Chams + Holo tím", password: "james"),
+                BundledPatch(resourceName: "ChamsKhongMau", projectName: "Chams Không màu", password: "james"),
+                BundledPatch(resourceName: "DinhViBlue", projectName: "Định vị blue", password: "james"),
+                BundledPatch(resourceName: "DinhVi", projectName: "Định Vị", password: nil),
+                BundledPatch(resourceName: "ModSkinGojo", projectName: "Mod Skin Gojo", password: "YaBaor")
+            ]
+        case .capCut:
+            return [
+                BundledPatch(resourceName: "capcutpro", projectName: "CapCut Pro", password: "Hoangdz")
+            ]
+        }
+    }
+}
+
 @MainActor
 final class PatchProjectStore: ObservableObject {
     @Published private(set) var items: [PatchLibraryItem] = []
@@ -36,7 +89,28 @@ final class PatchProjectStore: ObservableObject {
 
     private var pendingUnlock: PendingUnlock?
 
-    init() {
+    init(game: FreeFireGame = .max) {
+        if game == .max {
+            PatchProjectLibrary.removeBundledPackage(named: "Free Fire Max")
+        } else if game == .regular {
+            PatchProjectLibrary.removeBundledPackage(named: "Người Nhện")
+            PatchProjectLibrary.removeBundledPackage(named: "Quái Nhân Đen")
+        }
+        for patch in game.bundledPatches {
+            if patch.resourceName.hasSuffix(".3105") {
+                PatchProjectLibrary.installBundledFileIfNeeded(
+                    filename: patch.resourceName,
+                    projectName: patch.projectName,
+                    password: patch.password
+                )
+            } else {
+                PatchProjectLibrary.installBundledPackageIfNeeded(
+                    resourceName: patch.resourceName,
+                    projectName: patch.projectName,
+                    password: patch.password
+                )
+            }
+        }
         reload()
     }
 
@@ -224,6 +298,61 @@ final class PatchProjectStore: ObservableObject {
             reload()
         } catch {
             present(.invalidProject)
+        }
+    }
+
+    func setEnabled(_ enabled: Bool, for item: PatchLibraryItem, group: PatchToggleGroup? = nil) {
+        guard !isBusy else { return }
+        if DevicePatchService.requiresPairingTunnel, !LocalDevTunnelProbe.isConnected {
+            present(.pairingTunnelRequired)
+            return
+        }
+
+        let resolvedGroup = group ?? Self.group(for: item)
+
+        if enabled {
+            guard let baseProject = item.project else {
+                present(.invalidProject)
+                return
+            }
+
+            runOperation(successMessageKey: "patch.applied_message") {
+                if let resolvedGroup {
+                    for candidate in self.items where Self.group(for: candidate) == resolvedGroup && candidate.id != item.id {
+                        if let receipt = DevicePatchService.latestReceipt(projectID: candidate.id) {
+                            try DevicePatchService.restore(receipt: receipt)
+                        }
+                    }
+                }
+
+                let project = item.summary.schemaVersion >= 2
+                    ? try PatchProjectLibrary.synchronizeWorkspace(item: item)
+                    : baseProject
+                _ = try DevicePatchService.apply(project: project)
+            }
+        } else if let receipt = DevicePatchService.latestReceipt(projectID: item.id) {
+            runOperation(successMessageKey: "patch.restored_message") {
+                try DevicePatchService.restore(receipt: receipt)
+            }
+        }
+    }
+
+    private static func group(for item: PatchLibraryItem) -> PatchToggleGroup? {
+        let name = item.project?.name ?? item.packageURL.deletingPathExtension().lastPathComponent
+        switch name {
+        case "Aim Neck", "Aim Chest", "Aim Body", "Aim Drag", "Aim Magic", "Aim Đầu",
+               "Aim Neck Free Fire", "Aim Body Free Fire", "Aim Drag Free Fire",
+               "Aim Head Free Fire", "Aim Magic Free Fire", "Unlock FPS 144":
+            return .aim
+        case "Súng Trắng", "Chạm Đỏ", "Chams + Holo tím", "Chams Không màu",
+             "ChamsKhongMau", "Định vị blue", "DinhViBlue":
+            return .location
+        case "Mod Skin Gojo":
+            return .skin
+        case "CapCut Pro":
+            return .capCut
+        default:
+            return nil
         }
     }
 

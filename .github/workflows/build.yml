@@ -1,52 +1,64 @@
-name: darielxz-external
+name: Build iOS app
 
 on:
   push:
-    branches: [ "main", "master" ]
-  workflow_dispatch:
+  pull_request:
 
 jobs:
   build:
     runs-on: macos-latest
-
     steps:
-      - name: Obtener codigo del repositorio
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Seleccionar version de Xcode
-        run: sudo xcode-select -switch /Applications/Xcode.app
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
 
-      - name: Compilar Proyecto (.app)
-        run: |
-          xcodebuild build \
-            -project ThreeOneOSFive.xcodeproj \
-            -scheme 3105 \
-            -sdk iphoneos \
-            -configuration Release \
-            -derivedDataPath build \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+      - name: Rebuild Airlift FFI
+        run: bash ThreeOneOSFive/build-airlift-ffi.sh
 
-      - name: Incrustar carpeta Patches directamente en los recursos de la app
-        run: |
-          APP_PATH=$(find build/Build/Products/Release-iphoneos -name "*.app" -maxdepth 1)
-          
-          if [ -d "Patches" ]; then
-            cp -R "Patches" "$APP_PATH/"
-            echo "Carpeta Patches incrustada exitosamente en el bundle de la app."
-          else
-            echo "Error: La carpeta Patches no se encuentra en el repositorio de GitHub."
-          fi
+      - name: Build for iOS Simulator
+        run: >-
+          xcodebuild
+          -project ThreeOneOSFive.xcodeproj
+          -target SupportPatch
+          -sdk iphonesimulator
+          -destination 'generic/platform=iOS Simulator'
+          -configuration Debug
+          CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/build-simulator/Build/Products/Debug-iphonesimulator
+          CODE_SIGNING_ALLOWED=NO
+          ARCHS=arm64
+          ONLY_ACTIVE_ARCH=YES
+          build
 
-      - name: Empaquetar en archivo .IPA
-        run: |
-          mkdir -p Payload
-          cp -r build/Build/Products/Release-iphoneos/*.app Payload/
-          zip -r darielxz-external.ipa Payload
-
-      - name: Subir ejecutable IPA
+      - name: Upload simulator app
         uses: actions/upload-artifact@v4
         with:
-          name: darielxz-external-ipa
-          path: darielxz-external.ipa
+          name: SupportPatch-ios-simulator
+          path: build-simulator/Build/Products/Debug-iphonesimulator/*.app
+          if-no-files-found: error
+
+      - name: Build for iOS Device (unsigned IPA)
+        run: >-
+          xcodebuild
+          -project ThreeOneOSFive.xcodeproj
+          -target SupportPatch
+          -sdk iphoneos
+          -configuration Release
+          CONFIGURATION_BUILD_DIR=$GITHUB_WORKSPACE/build-device/Build/Products/Release-iphoneos
+          CODE_SIGNING_ALLOWED=NO
+          build
+
+      - name: Create unsigned IPA
+        run: |
+          mkdir -p Payload
+          cp -r build-device/Build/Products/Release-iphoneos/SupportPatch.app Payload/
+          zip -qr SupportPatch-unsigned.ipa Payload/
+          rm -rf Payload
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: SupportPatch-unsigned-ipa
+          path: SupportPatch-unsigned.ipa
+          if-no-files-found: error

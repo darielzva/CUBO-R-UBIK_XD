@@ -9,6 +9,9 @@ struct PatchTransactionReceipt: Equatable, Identifiable {
 }
 
 enum PatchTransaction {
+    typealias RemoteWriter = (_ bundleID: String, _ relativePath: String, _ data: Data) throws -> Void
+    typealias RemoteReader = (_ bundleID: String, _ relativePath: String) throws -> Data
+
     private enum Status: String, Codable {
         case prepared
         case applied
@@ -64,9 +67,14 @@ enum PatchTransaction {
         backupRoot: URL,
         containerResolver: (String) throws -> URL,
         beforeWrite: ((Int) throws -> Void)? = nil,
+        remoteWriter: RemoteWriter? = nil,
+        remoteReader: RemoteReader? = nil,
         fileManager: FileManager = .default
     ) throws -> PatchTransactionReceipt {
         guard !project.rules.isEmpty || !project.directories.isEmpty else {
+            throw PatchPackageError.invalidProject
+        }
+        guard (remoteWriter == nil) == (remoteReader == nil) else {
             throw PatchPackageError.invalidProject
         }
 
@@ -99,28 +107,34 @@ enum PatchTransaction {
             }
         }
 
-        for key in requestedDirectories.sorted(by: directoryKeySort) {
-            let parts = key.split(separator: "\0", maxSplits: 1, omittingEmptySubsequences: false)
-            guard parts.count == 2 else { throw PatchPackageError.invalidProject }
-            let bundleID = try PatchPathValidator.canonicalBundleIdentifier(String(parts[0]))
-            let relativePath = try PatchPathValidator.canonicalRelativePath(String(parts[1]))
-            let root = try resolvedRoot(for: bundleID)
-            let target = try PatchPathValidator.resolveContainedTargetURL(
-                relativePath: relativePath,
-                containerRoot: root
-            )
-            try validateDirectoryTarget(
-                target,
-                relativePath: relativePath,
-                containerRoot: root,
-                fileManager: fileManager
-            )
-            resolvedDirectories.append(ResolvedDirectory(
-                bundleID: bundleID,
-                relativePath: relativePath,
-                containerRoot: root,
-                target: target
-            ))
+        if remoteReader != nil {
+            guard !project.rules.isEmpty else {
+                throw PatchPackageError.remoteTargetMissing
+            }
+        } else {
+            for key in requestedDirectories.sorted(by: directoryKeySort) {
+                let parts = key.split(separator: "\0", maxSplits: 1, omittingEmptySubsequences: false)
+                guard parts.count == 2 else { throw PatchPackageError.invalidProject }
+                let bundleID = try PatchPathValidator.canonicalBundleIdentifier(String(parts[0]))
+                let relativePath = try PatchPathValidator.canonicalRelativePath(String(parts[1]))
+                let root = try resolvedRoot(for: bundleID)
+                let target = try PatchPathValidator.resolveContainedTargetURL(
+                    relativePath: relativePath,
+                    containerRoot: root
+                )
+                try validateDirectoryTarget(
+                    target,
+                    relativePath: relativePath,
+                    containerRoot: root,
+                    fileManager: fileManager
+                )
+                resolvedDirectories.append(ResolvedDirectory(
+                    bundleID: bundleID,
+                    relativePath: relativePath,
+                    containerRoot: root,
+                    target: target
+                ))
+            }
         }
 
         for rule in project.rules {
@@ -135,13 +149,15 @@ enum PatchTransaction {
             guard targetKeys.insert(targetKey).inserted else {
                 throw PatchPackageError.duplicateTarget
             }
-            try validateFileTarget(
-                target,
-                relativePath: rule.relativePath,
-                containerRoot: root,
-                allowMissingParents: true,
-                fileManager: fileManager
-            )
+            if remoteReader == nil {
+                try validateFileTarget(
+                    target,
+                    relativePath: rule.relativePath,
+                    containerRoot: root,
+                    allowMissingParents: true,
+                    fileManager: fileManager
+                )
+            }
             resolvedRules.append(ResolvedRule(rule: rule, containerRoot: root, target: target))
         }
 
@@ -166,13 +182,39 @@ enum PatchTransaction {
         }
         do {
             for resolved in resolvedRules {
-                let existed = fileManager.fileExists(atPath: resolved.target.path)
-                let backupFilename = existed ? "\(resolved.rule.id.uuidString).original" : nil
+                let existed: Bool
+                let backupFilename: String?
                 var originalDigest: Data?
-                if let backupFilename {
-                    let backupURL = transactionDirectory.appendingPathComponent(backupFilename)
-                    try fileManager.copyItem(at: resolved.target, to: backupURL)
-                    originalDigest = try digestFile(backupURL)
+                if let remoteReader {
+                    log("patch: backing up remote target \(resolved.rule.bundleID)/\(resolved.rule.relativePath)")
+                    let originalData = try remoteReader(
+                        resolved.rule.bundleID,
+                        resolved.rule.relativePath
+                    )
+                    guard originalData.count <= 32 * 1_024 * 1_024 else {
+                        throw PatchPackageError.sizeLimitExceeded
+                    }
+                    let filename = "\(resolved.rule.id.uuidString).original"
+                    let backupURL = transactionDirectory.appendingPathComponent(filename)
+                    try originalData.write(to: backupURL, options: [.atomic, .completeFileProtection])
+                    guard fileManager.fileExists(atPath: backupURL.path) else {
+                        throw PatchPackageError.applyFailed
+                    }
+                    existed = true
+                    backupFilename = filename
+                    originalDigest = digest(originalData)
+                    log("patch: remote backup saved bytes=\(originalData.count) path=\(backupURL.lastPathComponent)")
+                } else {
+                    existed = fileManager.fileExists(atPath: resolved.target.path)
+                    backupFilename = existed ? "\(resolved.rule.id.uuidString).original" : nil
+                    if let backupFilename {
+                        let backupURL = transactionDirectory.appendingPathComponent(backupFilename)
+                        try fileManager.copyItem(at: resolved.target, to: backupURL)
+                        guard fileManager.fileExists(atPath: backupURL.path) else {
+                            throw PatchPackageError.applyFailed
+                        }
+                        originalDigest = try digestFile(backupURL)
+                    }
                 }
                 records.append(Record(
                     ruleID: resolved.rule.id,
@@ -216,14 +258,31 @@ enum PatchTransaction {
             }
             for (index, resolved) in resolvedRules.enumerated() {
                 try beforeWrite?(index)
-                try atomicWrite(
-                    resolved.rule.replacementData,
-                    to: resolved.target,
-                    preservingExistingAttributes: true,
-                    fileManager: fileManager
-                )
-                guard try digestFile(resolved.target) == records[index].replacementDigest else {
-                    throw PatchPackageError.applyFailed
+                if let remoteWriter {
+                    try remoteWriter(
+                        resolved.rule.bundleID,
+                        resolved.rule.relativePath,
+                        resolved.rule.replacementData
+                    )
+                                        log("patch: remote write complete; verifying readback")
+                                        guard let remoteReader,
+                                                    digest(try remoteReader(
+                                                        resolved.rule.bundleID,
+                                                        resolved.rule.relativePath
+                                                    )) == records[index].replacementDigest else {
+                                                throw PatchPackageError.applyFailed
+                                        }
+                                        log("patch: remote readback digest verified")
+                } else {
+                    try atomicWrite(
+                        resolved.rule.replacementData,
+                        to: resolved.target,
+                        preservingExistingAttributes: true,
+                        fileManager: fileManager
+                    )
+                    guard try digestFile(resolved.target) == records[index].replacementDigest else {
+                        throw PatchPackageError.applyFailed
+                    }
                 }
             }
             journal.status = .applied
@@ -241,6 +300,8 @@ enum PatchTransaction {
                     roots: roots,
                     requirePatchedDigest: false,
                     createdDirectories: createdDirectories,
+                    remoteWriter: remoteWriter,
+                    remoteReader: remoteReader,
                     fileManager: fileManager
                 )
                 journal.status = .rolledBack
@@ -255,6 +316,8 @@ enum PatchTransaction {
     static func restore(
         receipt: PatchTransactionReceipt,
         containerResolver: (String) throws -> URL,
+        remoteWriter: RemoteWriter? = nil,
+        remoteReader: RemoteReader? = nil,
         fileManager: FileManager = .default
     ) throws {
         var journal: Journal
@@ -286,11 +349,14 @@ enum PatchTransaction {
                 roots: roots,
                 requirePatchedDigest: journal.status == .applied,
                 createdDirectories: journal.createdDirectories ?? [],
+                remoteWriter: remoteWriter,
+                remoteReader: remoteReader,
                 fileManager: fileManager
             )
             journal.status = .restored
             try writeJournal(journal, to: receipt.journalURL)
         } catch {
+            log("patch: restore failed: \(error)")
             throw PatchPackageError.restoreFailed
         }
     }
@@ -344,6 +410,8 @@ enum PatchTransaction {
         roots: [String: URL],
         requirePatchedDigest: Bool,
         createdDirectories: [DirectoryRecord],
+        remoteWriter: RemoteWriter?,
+        remoteReader: RemoteReader?,
         fileManager: FileManager
     ) throws {
         var resolvedTargets: [(Record, URL)] = []
@@ -356,18 +424,27 @@ enum PatchTransaction {
                 relativePath: record.relativePath,
                 containerRoot: root
             )
-            try validateFileTarget(
-                target,
-                relativePath: record.relativePath,
-                containerRoot: root,
-                allowMissingParents: !requirePatchedDigest,
-                fileManager: fileManager
-            )
+            if remoteReader == nil {
+                try validateFileTarget(
+                    target,
+                    relativePath: record.relativePath,
+                    containerRoot: root,
+                    allowMissingParents: !requirePatchedDigest,
+                    fileManager: fileManager
+                )
+            }
 
             if requirePatchedDigest {
-                guard fileManager.fileExists(atPath: target.path),
-                      try digestFile(target) == record.replacementDigest else {
-                    throw PatchPackageError.restoreFailed
+                if let remoteReader, remoteWriter == nil {
+                    guard digest(try remoteReader(record.bundleID, record.relativePath))
+                            == record.replacementDigest else {
+                        throw PatchPackageError.restoreFailed
+                    }
+                } else if remoteWriter == nil {
+                    guard fileManager.fileExists(atPath: target.path),
+                          try digestFile(target) == record.replacementDigest else {
+                        throw PatchPackageError.restoreFailed
+                    }
                 }
             }
             if record.originalExisted {
@@ -387,8 +464,22 @@ enum PatchTransaction {
         for (record, target) in resolvedTargets.reversed() {
             if record.originalExisted {
                 let backup = transactionDirectory.appendingPathComponent(record.backupFilename!)
-                try atomicCopy(backup, to: target, fileManager: fileManager)
+                if let remoteWriter {
+                    let originalData = try Data(contentsOf: backup)
+                    log("patch: restoring original remote target \(record.bundleID)/\(record.relativePath) bytes=\(originalData.count)")
+                    try remoteWriter(record.bundleID, record.relativePath, originalData)
+                    if let remoteReader {
+                        guard digest(try remoteReader(record.bundleID, record.relativePath))
+                                == record.originalDigest else {
+                            throw PatchPackageError.restoreFailed
+                        }
+                        log("patch: original remote target restored and verified \(record.bundleID)/\(record.relativePath)")
+                    }
+                } else {
+                    try atomicCopy(backup, to: target, fileManager: fileManager)
+                }
             } else if fileManager.fileExists(atPath: target.path) {
+                guard remoteWriter == nil else { throw PatchPackageError.restoreFailed }
                 try fileManager.removeItem(at: target)
             }
         }

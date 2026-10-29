@@ -2,10 +2,6 @@ import Foundation
 
 enum AppSection: Int, CaseIterable, Identifiable {
     case home
-    case files
-    case patches
-    case cleaner
-    case wallpapers
 
     var id: Int { rawValue }
 }
@@ -22,36 +18,12 @@ enum WallpaperFeatureSupportPolicy {
 }
 
 struct FeatureVisibility: Equatable {
-    static let cleanerStorageKey = "feature.cleaner.enabled"
-    static let wallpapersStorageKey = "feature.wallpapers.enabled"
-
-    let cleanerEnabled: Bool
-    let wallpapersEnabled: Bool
-    let wallpapersSupported: Bool
-
-    init(
-        cleanerEnabled: Bool,
-        wallpapersEnabled: Bool,
-        wallpapersSupported: Bool = true
-    ) {
-        self.cleanerEnabled = cleanerEnabled
-        self.wallpapersEnabled = wallpapersEnabled
-        self.wallpapersSupported = wallpapersSupported
-    }
-
     var visibleSections: [AppSection] {
-        AppSection.allCases.filter(isVisible)
+        AppSection.allCases
     }
 
     func isVisible(_ section: AppSection) -> Bool {
-        switch section {
-        case .cleaner:
-            return cleanerEnabled
-        case .wallpapers:
-            return wallpapersEnabled && wallpapersSupported
-        case .home, .files, .patches:
-            return true
-        }
+        section == .home
     }
 }
 
