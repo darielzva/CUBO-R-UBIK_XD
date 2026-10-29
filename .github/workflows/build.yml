@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-15
     concurrency:
       group: raki-ios-build-${{ github.ref }}
       cancel-in-progress: true
@@ -24,6 +24,18 @@ jobs:
         with:
           targets: aarch64-apple-ios,aarch64-apple-ios-sim
 
+      - name: Cache Rust dependencies and build outputs
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/cargo
+            ~/.cargo/registry
+            ~/.cargo/git
+            ThreeOneOSFive/airlift-rust-core/target
+          key: ${{ runner.os }}-${{ runner.arch }}-cargo-${{ hashFiles('ThreeOneOSFive/airlift-rust-core/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-cargo-
+
       - name: Debug estructura
         run: |
           pwd
@@ -32,6 +44,7 @@ jobs:
           git submodule status || true
           which cargo rustup
           cargo --version
+          xcodebuild -version
           head -c 300 ThreeOneOSFive/build-airlift-ffi.sh | cat -A | head -5
 
       - name: Rebuild Airlift FFI
