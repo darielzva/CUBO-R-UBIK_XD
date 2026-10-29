@@ -8,7 +8,7 @@ private enum OnboardingStep: Int, CaseIterable {
 }
 
 struct OnboardingView: View {
-    @AppStorage(AppLanguage.storageKey) private var languageCode = AppLanguage.english.rawValue
+    @AppStorage(AppLanguage.storageKey) private var languageCode = AppLanguage.portuguese.rawValue
     @State private var step: OnboardingStep = .language
     @State private var dragOffset: CGFloat = 0
     var onComplete: () -> Void

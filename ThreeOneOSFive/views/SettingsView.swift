@@ -11,7 +11,8 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.appLanguage) private var language
     @EnvironmentObject private var appState: AppState
-    @AppStorage(AppLanguage.storageKey) private var languageCode = AppLanguage.english.rawValue
+    @AppStorage(AppLanguage.storageKey) private var languageCode = AppLanguage.portuguese.rawValue
+    @AppStorage("raki.appearance") private var appearanceRawValue = AppAppearance.system.rawValue
     @StateObject private var pairingController = PairingController()
     @State private var isPairingReady = false
     @State private var isTunnelConnected: Bool?
@@ -29,13 +30,23 @@ struct SettingsView: View {
                         AppLogo()
 
                         VStack(alignment: .leading, spacing: 3) {
-                            Text("Support Patch").font(.headline)
+                            Text("Raki").font(.headline)
                             Text(language.text("common.version", appVersion))
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }
                     }
                     .padding(.vertical, 4)
+                }
+
+                Section(language.text("settings.appearance")) {
+                    Picker(language.text("settings.appearance"), selection: $appearanceRawValue) {
+                        Text(language.text("settings.appearance_system")).tag(AppAppearance.system.rawValue)
+                        Text(language.text("settings.appearance_light")).tag(AppAppearance.light.rawValue)
+                        Text(language.text("settings.appearance_dark")).tag(AppAppearance.dark.rawValue)
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
                 }
 
                 Section(language.text("settings.language")) {
@@ -173,47 +184,22 @@ struct SettingsView: View {
                 } footer: {
                     Text(language.text("settings.supported_versions_footer"))
                 }
-                Section(language.text("settings.social_media")) {
-                    creditsRow(
-                        name: "Telegram",
-                        role: language.text("social.github_role"),
-                        url: "https://t.me/hole30601"
-                    )
-                    creditsRow(
-                        name: "Cộng Đồng Cheat",
-                        role: language.text("social.iosvn_role"),
-                        url: "https://t.me/hackchetafree"
-                    )
-                }
-
                 Section(language.text("settings.credits")) {
-                    creditsRow(
-                        name: "Hole30601",
-                        role: language.text("credit.yangjiii"),
-                        url: "https://t.me/hole30601"
-                    )
-                    creditsRow(
-                        name: "0xjohnnydev",
-                        role: language.text("credit.filzaslop"),
-                        url: "https://github.com/0xjohnnydev/FilzaSlop"
-                    )
-                    creditsRow(
-                        name: "LeminLimez",
-                        role: language.text("credit.pocket_poster"),
-                        url: "https://github.com/leminlimez/Pocket-Poster"
-                    )
-                    creditsRow(
-                        name: "CrazyMind90",
-                        role: language.text("credit.sandbox_escape"),
-                        url: "https://github.com/CrazyMind90"
-                    )
-                    creditsRow(
-                        name: "forcequitOS",
-                        role: language.text("credit.forcequit"),
-                        url: "https://github.com/forcequitOS"
-                    )
+                    HStack(spacing: 12) {
+                        AppRowIcon(systemName: "person.fill")
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text("RknDEV")
+                                .font(.headline)
+                            Text(language.text("settings.app_creator"))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .padding(.vertical, 4)
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(AppTheme.pageBackground)
             .tint(AppTheme.accent)
             .navigationTitle(language.text("settings.title"))
             .navigationBarTitleDisplayMode(.inline)

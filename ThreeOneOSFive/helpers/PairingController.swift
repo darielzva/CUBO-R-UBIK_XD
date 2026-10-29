@@ -11,7 +11,7 @@ final class PairingController: NSObject, ObservableObject {
     @Published private(set) var pin: String?
     @Published private(set) var errorMessage: String?
 
-    private let hostName = "SupportPatch"
+    private let hostName = "Raki"
     private let hostModel = "iPhone"
     private let localNetworkAuthorization = PairingLocalNetworkAuthorization()
     private let keepAlive = PairingKeepAlive()
@@ -271,7 +271,7 @@ private final class PairingLocalNetworkAuthorization {
         parameters.includePeerToPeer = true
 
         let listener = try? NWListener(using: parameters)
-        listener?.service = NWListener.Service(name: "SupportPatchProbe", type: "_aircardprobe._tcp")
+        listener?.service = NWListener.Service(name: "RakiProbe", type: "_aircardprobe._tcp")
         listener?.newConnectionHandler = { $0.cancel() }
         self.listener = listener
 

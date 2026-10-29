@@ -65,7 +65,9 @@ struct ContentView: View {
                     )
                 }
             }
-            .navigationTitle("Support Patch")
+            .scrollContentBackground(.hidden)
+            .background(AppTheme.pageBackground)
+            .navigationTitle("Raki")
             .navigationSplitViewColumnWidth(min: 210, ideal: 240, max: 300)
         } detail: {
             sectionContent(selectedVisibleSection)
@@ -154,6 +156,7 @@ private struct DashboardView: View {
                 .frame(maxHeight: .infinity, alignment: .top)
             }
             .navigationBarTitleDisplayMode(.inline)
+            .background(AppTheme.pageBackground.ignoresSafeArea())
             .tint(AppTheme.accent)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

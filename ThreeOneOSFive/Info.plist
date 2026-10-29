@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleDevelopmentRegion</key>
-    <string>en</string>
+    <string>pt-BR</string>
     <key>CFBundleDisplayName</key>
-    <string>SupportPatch</string>
+    <string>Raki</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>SupportPatch</string>
+    <string>Raki</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
@@ -24,7 +24,7 @@
     <array>
         <dict>
             <key>CFBundleTypeName</key>
-            <string>Support Patch Package</string>
+            <string>Raki</string>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
             <key>LSHandlerRank</key>
@@ -61,7 +61,7 @@
                 <string>public.data</string>
             </array>
             <key>UTTypeDescription</key>
-            <string>Support Patch Package</string>
+            <string>Raki</string>
             <key>UTTypeIdentifier</key>
             <string>com.yangjiii.3105.patch-package</string>
             <key>UTTypeTagSpecification</key>
@@ -84,11 +84,11 @@
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>3105 needs access to photos for wallpaper customization.</string>
+    <string>O Raki precisa acessar suas fotos para personalizar o papel de parede.</string>
     <key>NSDocumentsFolderUsageDescription</key>
-    <string>3105 needs access to documents.</string>
+    <string>O Raki precisa acessar os documentos para importar e exportar arquivos.</string>
     <key>NSLocalNetworkUsageDescription</key>
-    <string>Support Patch uses the local network to pair this iPhone in Developer Mode.</string>
+    <string>O Raki usa a rede local para parear este iPhone no Modo de Desenvolvedor.</string>
     <key>NSBonjourServices</key>
     <array>
         <string>_remotepairing-pairable-host._tcp</string>

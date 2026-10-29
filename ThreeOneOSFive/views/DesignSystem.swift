@@ -1,14 +1,29 @@
 import SwiftUI
 
-enum AppTheme {
-    static let accent = Color(
-        uiColor: UIColor { traits in
-            traits.userInterfaceStyle == .dark
-                ? UIColor(red: 1.00, green: 0.64, blue: 0.42, alpha: 1.00)
-                : UIColor(red: 0.85, green: 0.42, blue: 0.20, alpha: 1.00)
+enum AppAppearance: String, CaseIterable, Identifiable {
+    case system
+    case light
+    case dark
+
+    var id: String { rawValue }
+
+    var colorScheme: ColorScheme? {
+        switch self {
+        case .system: return nil
+        case .light: return .light
+        case .dark: return .dark
         }
-    )
+    }
+}
+
+enum AppTheme {
+    // Raki uses a restrained black, gray and white palette in both themes.
+    static let accent = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark ? .white : .black
+    })
     static let pageBackground = Color(uiColor: .systemBackground)
+    static let cardBackground = Color(uiColor: .secondarySystemGroupedBackground)
+    static let border = Color(uiColor: .separator).opacity(0.42)
     static let consoleBackground = Color(uiColor: .secondarySystemBackground)
     static let pageInset: CGFloat = 16
     static let rowIconSize: CGFloat = 17
@@ -19,6 +34,17 @@ enum AppTheme {
     static let appIconSize: CGFloat = 32
     static let emptyIconSize: CGFloat = 30
     static let selectionIconSize: CGFloat = 18
+}
+
+extension View {
+    func rakiCard(cornerRadius: CGFloat = 20) -> some View {
+        self
+            .background(AppTheme.cardBackground, in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .stroke(AppTheme.border, lineWidth: 0.8)
+            }
+    }
 }
 
 struct AppRowIcon: View {
