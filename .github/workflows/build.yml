@@ -3,6 +3,7 @@ name: Build iOS app
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -53,8 +54,8 @@ jobs:
       - name: Upload simulator app
         uses: actions/upload-artifact@v4
         with:
-          name: SupportPatch-ios-simulator
-          path: build-simulator/Build/Products/Debug-iphonesimulator/*.app
+          name: Raki-ios-simulator
+          path: build-simulator/Build/Products/Debug-iphonesimulator/Raki.app
           if-no-files-found: error
 
       - name: Build for iOS Device (unsigned IPA)
@@ -72,13 +73,13 @@ jobs:
         run: |
           ls -la build-device/Build/Products/Release-iphoneos/
           mkdir -p Payload
-          cp -r build-device/Build/Products/Release-iphoneos/SupportPatch.app Payload/
-          zip -qr SupportPatch-unsigned.ipa Payload/
+          cp -r build-device/Build/Products/Release-iphoneos/Raki.app Payload/
+          zip -qr Raki-unsigned.ipa Payload/
           rm -rf Payload
 
       - name: Upload unsigned IPA
         uses: actions/upload-artifact@v4
         with:
-          name: SupportPatch-unsigned-ipa
-          path: SupportPatch-unsigned.ipa
+          name: Raki-unsigned-ipa
+          path: Raki-unsigned.ipa
           if-no-files-found: error
