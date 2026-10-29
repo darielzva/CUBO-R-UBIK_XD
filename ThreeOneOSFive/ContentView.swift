@@ -149,9 +149,7 @@ private struct DashboardView: View {
                 deviceSection
                     .fixedSize(horizontal: false, vertical: true)
                 VStack(spacing: 12) {
-                    FreeFireGameEntryView(game: .max)
                     FreeFireGameEntryView(game: .regular)
-                    FreeFireGameEntryView(game: .capCut)
                 }
                 .frame(maxHeight: .infinity, alignment: .top)
             }

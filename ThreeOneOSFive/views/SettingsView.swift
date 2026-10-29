@@ -26,17 +26,19 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section {
-                    HStack(spacing: 14) {
-                        AppLogo()
+                    VStack(spacing: 10) {
+                        AppLogo(size: 84)
 
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text("Raki").font(.headline)
+                        VStack(spacing: 3) {
+                            Text("Raki")
+                                .font(.title3.weight(.bold))
                             Text(language.text("common.version", appVersion))
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }
                     }
-                    .padding(.vertical, 4)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
                 }
 
                 Section(language.text("settings.appearance")) {
