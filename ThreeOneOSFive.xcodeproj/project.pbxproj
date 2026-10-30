@@ -180,26 +180,26 @@
 		3105B123 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		3105B124 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		3105B125 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		3A9CD9BD8DAE492A8E241220 /* AimBody.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimBody.3105"; path = "ThreeOneOSFive/Patches/AimBody.3105"; sourceTree = "<group>"; };
-		E8014E35CA524CE9A6DE1CB8 /* AimBodyFreeFire.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimBodyFreeFire.3105"; path = "ThreeOneOSFive/Patches/AimBodyFreeFire.3105"; sourceTree = "<group>"; };
-		CF2ABA73344146FC89F622B7 /* AimChest.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimChest.3105"; path = "ThreeOneOSFive/Patches/AimChest.3105"; sourceTree = "<group>"; };
-		923D0F53BE154AD7885FC4A6 /* AimDau.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimDau.3105"; path = "ThreeOneOSFive/Patches/AimDau.3105"; sourceTree = "<group>"; };
-		6664060F92E04C7EB0A83212 /* AimDrag.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimDrag.3105"; path = "ThreeOneOSFive/Patches/AimDrag.3105"; sourceTree = "<group>"; };
-		652538D44AFB4EDE9A4F1B74 /* AimDragFreeFire.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimDragFreeFire.3105"; path = "ThreeOneOSFive/Patches/AimDragFreeFire.3105"; sourceTree = "<group>"; };
-		B29FCF9F5F35426587646B37 /* AimHeadFreeFire.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimHeadFreeFire.3105"; path = "ThreeOneOSFive/Patches/AimHeadFreeFire.3105"; sourceTree = "<group>"; };
-		C42FE5D41DE640FE8CBC1422 /* AimMagic.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimMagic.3105"; path = "ThreeOneOSFive/Patches/AimMagic.3105"; sourceTree = "<group>"; };
-		CFB232E3C1344B3F880113F1 /* AimMagicFreeFire.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimMagicFreeFire.3105"; path = "ThreeOneOSFive/Patches/AimMagicFreeFire.3105"; sourceTree = "<group>"; };
-		03D1BF2CD9124F62B3AC67B5 /* AimNeck.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimNeck.3105"; path = "ThreeOneOSFive/Patches/AimNeck.3105"; sourceTree = "<group>"; };
-		9D18449B3EA644C2905E48D9 /* AimNeckFreeFire.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimNeckFreeFire.3105"; path = "ThreeOneOSFive/Patches/AimNeckFreeFire.3105"; sourceTree = "<group>"; };
-		C67D0EFF3B8142D8AC43F469 /* ChamDo.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ChamDo.3105"; path = "ThreeOneOSFive/Patches/ChamDo.3105"; sourceTree = "<group>"; };
-		2A6CDA6535B04CA7B99793A9 /* ChamsHoloTim.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ChamsHoloTim.3105"; path = "ThreeOneOSFive/Patches/ChamsHoloTim.3105"; sourceTree = "<group>"; };
-		AD82E94E02E341699B532ADE /* ChamsKhongMau.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ChamsKhongMau.3105"; path = "ThreeOneOSFive/Patches/ChamsKhongMau.3105"; sourceTree = "<group>"; };
-		D9F9F2B96419406999C8582B /* DinhVi.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "DinhVi.3105"; path = "ThreeOneOSFive/Patches/DinhVi.3105"; sourceTree = "<group>"; };
-		EA5092E2780E48768AB48CBB /* ESPFREEFIRETH.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ESPFREEFIRETH.3105"; path = "ThreeOneOSFive/Patches/ESPFREEFIRETH.3105"; sourceTree = "<group>"; };
-		49C1E0B3AC834E719C1F5090 /* ModSkinGojo.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ModSkinGojo.3105"; path = "ThreeOneOSFive/Patches/ModSkinGojo.3105"; sourceTree = "<group>"; };
-		A16A1D18BC80478C912B860E /* SungTrang.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SungTrang.3105"; path = "ThreeOneOSFive/Patches/SungTrang.3105"; sourceTree = "<group>"; };
-		AA11994F89C7422EAEB84D2A /* UnlockFPS144.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "UnlockFPS144.3105"; path = "ThreeOneOSFive/Patches/UnlockFPS144.3105"; sourceTree = "<group>"; };
-		C3FA81BB8AF14EC29345DEE8 /* capcutpro.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "capcutpro.3105"; path = "ThreeOneOSFive/Patches/capcutpro.3105"; sourceTree = "<group>"; };
+		3A9CD9BD8DAE492A8E241220 /* AimBody.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimBody.3105"; path = "AimBody.3105"; sourceTree = "<group>"; };
+		E8014E35CA524CE9A6DE1CB8 /* AimBodyFreeFire.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimBodyFreeFire.3105"; path = "AimBodyFreeFire.3105"; sourceTree = "<group>"; };
+		CF2ABA73344146FC89F622B7 /* AimChest.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimChest.3105"; path = "AimChest.3105"; sourceTree = "<group>"; };
+		923D0F53BE154AD7885FC4A6 /* AimDau.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimDau.3105"; path = "AimDau.3105"; sourceTree = "<group>"; };
+		6664060F92E04C7EB0A83212 /* AimDrag.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimDrag.3105"; path = "AimDrag.3105"; sourceTree = "<group>"; };
+		652538D44AFB4EDE9A4F1B74 /* AimDragFreeFire.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimDragFreeFire.3105"; path = "AimDragFreeFire.3105"; sourceTree = "<group>"; };
+		B29FCF9F5F35426587646B37 /* AimHeadFreeFire.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimHeadFreeFire.3105"; path = "AimHeadFreeFire.3105"; sourceTree = "<group>"; };
+		C42FE5D41DE640FE8CBC1422 /* AimMagic.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimMagic.3105"; path = "AimMagic.3105"; sourceTree = "<group>"; };
+		CFB232E3C1344B3F880113F1 /* AimMagicFreeFire.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimMagicFreeFire.3105"; path = "AimMagicFreeFire.3105"; sourceTree = "<group>"; };
+		03D1BF2CD9124F62B3AC67B5 /* AimNeck.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimNeck.3105"; path = "AimNeck.3105"; sourceTree = "<group>"; };
+		9D18449B3EA644C2905E48D9 /* AimNeckFreeFire.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimNeckFreeFire.3105"; path = "AimNeckFreeFire.3105"; sourceTree = "<group>"; };
+		C67D0EFF3B8142D8AC43F469 /* ChamDo.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ChamDo.3105"; path = "ChamDo.3105"; sourceTree = "<group>"; };
+		2A6CDA6535B04CA7B99793A9 /* ChamsHoloTim.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ChamsHoloTim.3105"; path = "ChamsHoloTim.3105"; sourceTree = "<group>"; };
+		AD82E94E02E341699B532ADE /* ChamsKhongMau.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ChamsKhongMau.3105"; path = "ChamsKhongMau.3105"; sourceTree = "<group>"; };
+		D9F9F2B96419406999C8582B /* DinhVi.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "DinhVi.3105"; path = "DinhVi.3105"; sourceTree = "<group>"; };
+		EA5092E2780E48768AB48CBB /* ESPFREEFIRETH.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ESPFREEFIRETH.3105"; path = "ESPFREEFIRETH.3105"; sourceTree = "<group>"; };
+		49C1E0B3AC834E719C1F5090 /* ModSkinGojo.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ModSkinGojo.3105"; path = "ModSkinGojo.3105"; sourceTree = "<group>"; };
+		A16A1D18BC80478C912B860E /* SungTrang.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SungTrang.3105"; path = "SungTrang.3105"; sourceTree = "<group>"; };
+		AA11994F89C7422EAEB84D2A /* UnlockFPS144.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "UnlockFPS144.3105"; path = "UnlockFPS144.3105"; sourceTree = "<group>"; };
+		C3FA81BB8AF14EC29345DEE8 /* capcutpro.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "capcutpro.3105"; path = "capcutpro.3105"; sourceTree = "<group>"; };
 		3105V100 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		/* End PBXFileReference section */
 
@@ -354,6 +354,9 @@
 		};
 		296EA03154BA42E08F82701B /* Patches */ = {
 			isa = PBXGroup;
+			name = Patches;
+			path = ThreeOneOSFive/Patches;
+			sourceTree = SOURCE_ROOT;
 			children = (
 				3A9CD9BD8DAE492A8E241220 /* AimBody.3105 */,
 				E8014E35CA524CE9A6DE1CB8 /* AimBodyFreeFire.3105 */,
