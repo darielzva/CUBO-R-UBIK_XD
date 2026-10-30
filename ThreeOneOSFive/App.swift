@@ -16,6 +16,7 @@ private func retainGrappaTokenSymbol(
 @main
 struct ThreeOneOSFiveApp: App {
     @StateObject private var appState = AppState()
+    @StateObject private var patchActivationStore = PatchActivationStore()
     @StateObject private var patchDraftCoordinator = PatchDraftCoordinator()
     @StateObject private var fileOperationCoordinator = FileOperationCoordinator()
     @AppStorage(AppLanguage.storageKey) private var languageCode = AppLanguage.english.rawValue
@@ -54,6 +55,7 @@ struct ThreeOneOSFiveApp: App {
                     ZStack {
                         ContentView()
                             .environmentObject(appState)
+                            .environmentObject(patchActivationStore)
                             .environmentObject(patchDraftCoordinator)
                             .environmentObject(fileOperationCoordinator)
                             .environment(\.appLanguage, language)

@@ -78,7 +78,7 @@ struct ContentView: View {
     private func sectionContent(_ section: AppSection) -> some View {
         switch section {
         case .home:
-            DashboardView()
+            RootTabView()
         }
     }
 

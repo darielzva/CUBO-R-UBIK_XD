@@ -71,7 +71,28 @@
 		3105A234 /* AppDataBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105A105; };
 		3105A228 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3105A120; };
 		3105A211 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3105A031; };
-/* End PBXBuildFile section */
+		317A33A39A054CFF855748BF /* AimBody.3105 in Resources */ = {isa = PBXBuildFile; fileRef = 3A9CD9BD8DAE492A8E241220 /* AimBody.3105 */; };
+		076D29D603284E2484E57901 /* AimBodyFreeFire.3105 in Resources */ = {isa = PBXBuildFile; fileRef = E8014E35CA524CE9A6DE1CB8 /* AimBodyFreeFire.3105 */; };
+		EF3587BBFDA54CE098DBEFEE /* AimChest.3105 in Resources */ = {isa = PBXBuildFile; fileRef = CF2ABA73344146FC89F622B7 /* AimChest.3105 */; };
+		4D3F9042493B42618BBE8CD4 /* AimDau.3105 in Resources */ = {isa = PBXBuildFile; fileRef = 923D0F53BE154AD7885FC4A6 /* AimDau.3105 */; };
+		211523239F4A4223AF8D6A90 /* AimDrag.3105 in Resources */ = {isa = PBXBuildFile; fileRef = 6664060F92E04C7EB0A83212 /* AimDrag.3105 */; };
+		F8A8FD52B24846B29B8F6E04 /* AimDragFreeFire.3105 in Resources */ = {isa = PBXBuildFile; fileRef = 652538D44AFB4EDE9A4F1B74 /* AimDragFreeFire.3105 */; };
+		2372CACDB0374B94ADB1E8D3 /* AimHeadFreeFire.3105 in Resources */ = {isa = PBXBuildFile; fileRef = B29FCF9F5F35426587646B37 /* AimHeadFreeFire.3105 */; };
+		2B9805726EBF4E6093E5617E /* AimMagic.3105 in Resources */ = {isa = PBXBuildFile; fileRef = C42FE5D41DE640FE8CBC1422 /* AimMagic.3105 */; };
+		8B6F34B9521146BC96F82848 /* AimMagicFreeFire.3105 in Resources */ = {isa = PBXBuildFile; fileRef = CFB232E3C1344B3F880113F1 /* AimMagicFreeFire.3105 */; };
+		9E2D73D7DB82420D9BAA2711 /* AimNeck.3105 in Resources */ = {isa = PBXBuildFile; fileRef = 03D1BF2CD9124F62B3AC67B5 /* AimNeck.3105 */; };
+		1DC8FD1FAD944AEEBA5251E7 /* AimNeckFreeFire.3105 in Resources */ = {isa = PBXBuildFile; fileRef = 9D18449B3EA644C2905E48D9 /* AimNeckFreeFire.3105 */; };
+		116FCECD2E32447F9E8C0BCF /* ChamDo.3105 in Resources */ = {isa = PBXBuildFile; fileRef = C67D0EFF3B8142D8AC43F469 /* ChamDo.3105 */; };
+		21CCE1BB57F44AF1831E7AED /* ChamsHoloTim.3105 in Resources */ = {isa = PBXBuildFile; fileRef = 2A6CDA6535B04CA7B99793A9 /* ChamsHoloTim.3105 */; };
+		2FB4EC84AA3140F5AEC58288 /* ChamsKhongMau.3105 in Resources */ = {isa = PBXBuildFile; fileRef = AD82E94E02E341699B532ADE /* ChamsKhongMau.3105 */; };
+		8D5E6F1F1A1B4147857C3EF3 /* DinhVi.3105 in Resources */ = {isa = PBXBuildFile; fileRef = D9F9F2B96419406999C8582B /* DinhVi.3105 */; };
+		CE04FBFF8B824B9794BCE0C0 /* ESPFREEFIRETH.3105 in Resources */ = {isa = PBXBuildFile; fileRef = EA5092E2780E48768AB48CBB /* ESPFREEFIRETH.3105 */; };
+		470667AF509D47EB85644DB7 /* ModSkinGojo.3105 in Resources */ = {isa = PBXBuildFile; fileRef = 49C1E0B3AC834E719C1F5090 /* ModSkinGojo.3105 */; };
+		5DFD719FD8654180A290DF48 /* SungTrang.3105 in Resources */ = {isa = PBXBuildFile; fileRef = A16A1D18BC80478C912B860E /* SungTrang.3105 */; };
+		55811680275C496D919BEE62 /* UnlockFPS144.3105 in Resources */ = {isa = PBXBuildFile; fileRef = AA11994F89C7422EAEB84D2A /* UnlockFPS144.3105 */; };
+		C4F6AB42D0874DB0B53A25D5 /* capcutpro.3105 in Resources */ = {isa = PBXBuildFile; fileRef = C3FA81BB8AF14EC29345DEE8 /* capcutpro.3105 */; };
+		3105V200 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105V100 /* HomeView.swift */; };
+		/* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3105A010 /* SupportPatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SupportPatch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -159,7 +180,28 @@
 		3105B123 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		3105B124 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		3105B125 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-/* End PBXFileReference section */
+		3A9CD9BD8DAE492A8E241220 /* AimBody.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimBody.3105"; path = "Patches/AimBody.3105"; sourceTree = "<group>"; };
+		E8014E35CA524CE9A6DE1CB8 /* AimBodyFreeFire.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimBodyFreeFire.3105"; path = "Patches/AimBodyFreeFire.3105"; sourceTree = "<group>"; };
+		CF2ABA73344146FC89F622B7 /* AimChest.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimChest.3105"; path = "Patches/AimChest.3105"; sourceTree = "<group>"; };
+		923D0F53BE154AD7885FC4A6 /* AimDau.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimDau.3105"; path = "Patches/AimDau.3105"; sourceTree = "<group>"; };
+		6664060F92E04C7EB0A83212 /* AimDrag.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimDrag.3105"; path = "Patches/AimDrag.3105"; sourceTree = "<group>"; };
+		652538D44AFB4EDE9A4F1B74 /* AimDragFreeFire.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimDragFreeFire.3105"; path = "Patches/AimDragFreeFire.3105"; sourceTree = "<group>"; };
+		B29FCF9F5F35426587646B37 /* AimHeadFreeFire.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimHeadFreeFire.3105"; path = "Patches/AimHeadFreeFire.3105"; sourceTree = "<group>"; };
+		C42FE5D41DE640FE8CBC1422 /* AimMagic.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimMagic.3105"; path = "Patches/AimMagic.3105"; sourceTree = "<group>"; };
+		CFB232E3C1344B3F880113F1 /* AimMagicFreeFire.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimMagicFreeFire.3105"; path = "Patches/AimMagicFreeFire.3105"; sourceTree = "<group>"; };
+		03D1BF2CD9124F62B3AC67B5 /* AimNeck.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimNeck.3105"; path = "Patches/AimNeck.3105"; sourceTree = "<group>"; };
+		9D18449B3EA644C2905E48D9 /* AimNeckFreeFire.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AimNeckFreeFire.3105"; path = "Patches/AimNeckFreeFire.3105"; sourceTree = "<group>"; };
+		C67D0EFF3B8142D8AC43F469 /* ChamDo.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ChamDo.3105"; path = "Patches/ChamDo.3105"; sourceTree = "<group>"; };
+		2A6CDA6535B04CA7B99793A9 /* ChamsHoloTim.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ChamsHoloTim.3105"; path = "Patches/ChamsHoloTim.3105"; sourceTree = "<group>"; };
+		AD82E94E02E341699B532ADE /* ChamsKhongMau.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ChamsKhongMau.3105"; path = "Patches/ChamsKhongMau.3105"; sourceTree = "<group>"; };
+		D9F9F2B96419406999C8582B /* DinhVi.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "DinhVi.3105"; path = "Patches/DinhVi.3105"; sourceTree = "<group>"; };
+		EA5092E2780E48768AB48CBB /* ESPFREEFIRETH.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ESPFREEFIRETH.3105"; path = "Patches/ESPFREEFIRETH.3105"; sourceTree = "<group>"; };
+		49C1E0B3AC834E719C1F5090 /* ModSkinGojo.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ModSkinGojo.3105"; path = "Patches/ModSkinGojo.3105"; sourceTree = "<group>"; };
+		A16A1D18BC80478C912B860E /* SungTrang.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SungTrang.3105"; path = "Patches/SungTrang.3105"; sourceTree = "<group>"; };
+		AA11994F89C7422EAEB84D2A /* UnlockFPS144.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "UnlockFPS144.3105"; path = "Patches/UnlockFPS144.3105"; sourceTree = "<group>"; };
+		C3FA81BB8AF14EC29345DEE8 /* capcutpro.3105 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "capcutpro.3105"; path = "Patches/capcutpro.3105"; sourceTree = "<group>"; };
+		3105V100 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		/* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		3105A300 /* Frameworks */ = {
@@ -177,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				3105A401 /* ThreeOneOSFive */,
+				296EA03154BA42E08F82701B /* Patches */,
 				3105A402 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -236,6 +279,7 @@
 				3105E101 /* CleanerView.swift */,
 				3105F106 /* WallpaperLabView.swift */,
 				3105F108 /* OnboardingView.swift */,
+				3105V100 /* HomeView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -308,7 +352,35 @@
 			path = kexploit;
 			sourceTree = "<group>";
 		};
-/* End PBXGroup section */
+		296EA03154BA42E08F82701B /* Patches */ = {
+			isa = PBXGroup;
+			children = (
+				3A9CD9BD8DAE492A8E241220 /* AimBody.3105 */,
+				E8014E35CA524CE9A6DE1CB8 /* AimBodyFreeFire.3105 */,
+				CF2ABA73344146FC89F622B7 /* AimChest.3105 */,
+				923D0F53BE154AD7885FC4A6 /* AimDau.3105 */,
+				6664060F92E04C7EB0A83212 /* AimDrag.3105 */,
+				652538D44AFB4EDE9A4F1B74 /* AimDragFreeFire.3105 */,
+				B29FCF9F5F35426587646B37 /* AimHeadFreeFire.3105 */,
+				C42FE5D41DE640FE8CBC1422 /* AimMagic.3105 */,
+				CFB232E3C1344B3F880113F1 /* AimMagicFreeFire.3105 */,
+				03D1BF2CD9124F62B3AC67B5 /* AimNeck.3105 */,
+				9D18449B3EA644C2905E48D9 /* AimNeckFreeFire.3105 */,
+				C67D0EFF3B8142D8AC43F469 /* ChamDo.3105 */,
+				2A6CDA6535B04CA7B99793A9 /* ChamsHoloTim.3105 */,
+				AD82E94E02E341699B532ADE /* ChamsKhongMau.3105 */,
+				D9F9F2B96419406999C8582B /* DinhVi.3105 */,
+				EA5092E2780E48768AB48CBB /* ESPFREEFIRETH.3105 */,
+				49C1E0B3AC834E719C1F5090 /* ModSkinGojo.3105 */,
+				A16A1D18BC80478C912B860E /* SungTrang.3105 */,
+				AA11994F89C7422EAEB84D2A /* UnlockFPS144.3105 */,
+				C3FA81BB8AF14EC29345DEE8 /* capcutpro.3105 */,
+			);
+			name = Patches;
+			path = Patches;
+			sourceTree = "<group>";
+		};
+		/* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
 		3105A500 /* SupportPatch */ = {
@@ -365,6 +437,27 @@
 			files = (
 				3105A211,
 				3105A228,
+			
+				317A33A39A054CFF855748BF /* AimBody.3105 in Resources */,
+				076D29D603284E2484E57901 /* AimBodyFreeFire.3105 in Resources */,
+				EF3587BBFDA54CE098DBEFEE /* AimChest.3105 in Resources */,
+				4D3F9042493B42618BBE8CD4 /* AimDau.3105 in Resources */,
+				211523239F4A4223AF8D6A90 /* AimDrag.3105 in Resources */,
+				F8A8FD52B24846B29B8F6E04 /* AimDragFreeFire.3105 in Resources */,
+				2372CACDB0374B94ADB1E8D3 /* AimHeadFreeFire.3105 in Resources */,
+				2B9805726EBF4E6093E5617E /* AimMagic.3105 in Resources */,
+				8B6F34B9521146BC96F82848 /* AimMagicFreeFire.3105 in Resources */,
+				9E2D73D7DB82420D9BAA2711 /* AimNeck.3105 in Resources */,
+				1DC8FD1FAD944AEEBA5251E7 /* AimNeckFreeFire.3105 in Resources */,
+				116FCECD2E32447F9E8C0BCF /* ChamDo.3105 in Resources */,
+				21CCE1BB57F44AF1831E7AED /* ChamsHoloTim.3105 in Resources */,
+				2FB4EC84AA3140F5AEC58288 /* ChamsKhongMau.3105 in Resources */,
+				8D5E6F1F1A1B4147857C3EF3 /* DinhVi.3105 in Resources */,
+				CE04FBFF8B824B9794BCE0C0 /* ESPFREEFIRETH.3105 in Resources */,
+				470667AF509D47EB85644DB7 /* ModSkinGojo.3105 in Resources */,
+				5DFD719FD8654180A290DF48 /* SungTrang.3105 in Resources */,
+				55811680275C496D919BEE62 /* UnlockFPS144.3105 in Resources */,
+				C4F6AB42D0874DB0B53A25D5 /* capcutpro.3105 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,6 +518,7 @@
 				3105H200,
 				3105I200,
 				3105I201,
+				3105V200,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
