@@ -86,7 +86,8 @@ final class PatchActivationStore: ObservableObject {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 let url = try Self.resolveURL(fileName: patch.fileName)
-                let project = try PatchProjectLibrary.load(from: url)
+                let data = try PatchProjectLibrary.readPackage(at: url)
+                let project = try PatchPackageCodec.decode(data)
                 let _ = try DevicePatchService.apply(project: project)
                 DispatchQueue.main.async { self.active.insert(patch.id) }
                 log("patch: applied \(patch.fileName)")
